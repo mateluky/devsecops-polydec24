@@ -13,12 +13,11 @@ export default async function handler(req, res) {
 
   await client.connect();
 
-  // VULNERABILITY: SQL Injection - user input directly concatenated into query
   const userId = req.query.id;
-  const query = `SELECT * FROM users WHERE id = ${userId}`;
-  
+
+  const query = 'SELECT * FROM users WHERE id = $1';
+
   try {
-    const query = "SELECT * FROM users WHERE id = $1";
     const result = await client.query(query, [userId]);
     res.status(200).json({ user: result.rows[0] });
   } catch (error) {
