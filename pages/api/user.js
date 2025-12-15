@@ -20,10 +20,13 @@ export default async function handler(req, res) {
     return;
   }
 
-  const query = 'SELECT * FROM users WHERE id = $1';
+  const query = {
+    text: 'SELECT * FROM users WHERE id = $1',
+    values: [userId],
+  };
 
   try {
-    const result = await client.query(query, [userId]);
+    const result = await client.query(query);
     res.status(200).json({ user: result.rows[0] });
   } catch (error) {
     res.status(500).json({ error: 'Database error' });
