@@ -9,52 +9,60 @@ jobs:
     steps: 
       - name: checkout repo
         uses: actions/checkout@v3
+
       - name: use node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+
       - run: npm install
+
       - run: npm run build
         env:
           PASSWORD: ${{ secrets.PASSWORD }}
 
   test: 
     needs: build
-
     runs-on: ubuntu-latest
 
     steps: 
       - name: checkout repo
         uses: actions/checkout@v3
+
       - name: use node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+
       - run: npm install
+
       - run: npm test
         env:
           PASSWORD: ${{ secrets.PASSWORD }}
 
   sca:
-      needs: build
+    needs: build
+    runs-on: ubuntu-latest
 
-      runs-on: ubuntu-latest
+    steps: 
+      - name: checkout repo
+        uses: actions/checkout@v3
 
-      steps: 
-        - name: checkout repo
-          uses: actions/checkout@v3
-        - name: use node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: '18.x'
-        - run: npm install
-        - run: npm audit
-        
+      - name: use node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - run: npm install
+      - run: npm audit fix --force
+      - run: npm audit
+
   sast:
-      needs: build
-      
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Bearer
-          uses: bearer/bearer-action@v2
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bearer
+        uses: bearer/bearer-action@v2
