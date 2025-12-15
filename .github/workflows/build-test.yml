@@ -15,8 +15,6 @@ jobs:
           node-version: '18.x'
       - run: npm install
       - run: npm run build
-        env:
-          PASSWORD: ${{ secrets.PASSWORD }}
 
   test: 
     needs: build
@@ -32,8 +30,6 @@ jobs:
           node-version: '18.x'
       - run: npm install
       - run: npm test
-        env:
-          PASSWORD: ${{ secrets.PASSWORD }}
 
   sca:
     needs: build
@@ -49,5 +45,6 @@ jobs:
           node-version: '18.x'
 
       - run: npm install
-      - run: npm audit || true
+      - run: npm audit fix
+      - run: npm audit
 
