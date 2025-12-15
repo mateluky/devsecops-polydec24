@@ -12,8 +12,13 @@ export default async function handler(req, res) {
   });
 
   await client.connect();
+  
+  const userId = parseInt(req.query.id, 10);
 
-  const userId = req.query.id;
+  if (isNaN(userId)) {
+    res.status(400).json({ error: 'Invalid user ID' });
+    return;
+  }
 
   const query = 'SELECT * FROM users WHERE id = $1';
 
